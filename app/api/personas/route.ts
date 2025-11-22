@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { readData, writeData } from '@/lib/data';
-import { Persona } from '@/types';
+import { Persona, PersonaType } from '@/types';
+import { personaConfigs } from '@/lib/personaConfig';
 
 export async function GET() {
   try {
@@ -16,15 +17,24 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const personas = readData<Persona[]>('personas.json', []);
     
+    const personaType = body.type as PersonaType;
+    const config = personaConfigs[personaType];
+    
+    if (!config) {
+      return NextResponse.json({ error: 'Invalid persona type' }, { status: 400 });
+    }
+    
     const newPersona: Persona = {
       id: `persona-${Date.now()}`,
-      type: body.type,
+      type: personaType,
       name: body.name,
       email: body.email,
       slackUserId: body.slackUserId,
       whatsappNumber: body.whatsappNumber,
-      preferredChannels: body.preferredChannels || ['email', 'dashboard'],
-      alertTiers: body.alertTiers || ['critical', 'warning', 'informational'],
+      preferredChannels: body.preferredChannels || config.preferredChannels,
+      alertTiers: body.alertTiers || config.alertTiers,
+      metrics: config.metrics,
+      triggers: config.triggers,
     };
     
     personas.push(newPersona);
