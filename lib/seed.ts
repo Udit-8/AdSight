@@ -1,8 +1,9 @@
 import { writeData } from './data';
 import { Persona, AlertRule, Campaign } from '@/types';
+import { personaConfigs } from './personaConfig';
 
 export function seedInitialData() {
-  // Seed default personas
+  // Seed default personas with full configuration
   const defaultPersonas: Persona[] = [
     {
       id: 'persona-1',
@@ -12,6 +13,7 @@ export function seedInitialData() {
       slackUserId: 'U1234567890',
       preferredChannels: ['email', 'slack', 'dashboard'],
       alertTiers: ['critical', 'warning', 'informational'],
+      ...personaConfigs.performance_marketer,
     },
     {
       id: 'persona-2',
@@ -21,6 +23,7 @@ export function seedInitialData() {
       slackUserId: 'U0987654321',
       preferredChannels: ['email', 'slack', 'dashboard'],
       alertTiers: ['critical', 'warning'],
+      ...personaConfigs.account_manager,
     },
     {
       id: 'persona-3',
@@ -30,6 +33,7 @@ export function seedInitialData() {
       whatsappNumber: '+1234567890',
       preferredChannels: ['email', 'whatsapp', 'dashboard'],
       alertTiers: ['critical', 'warning'],
+      ...personaConfigs.business_owner,
     },
     {
       id: 'persona-4',
@@ -39,6 +43,7 @@ export function seedInitialData() {
       slackUserId: 'U1122334455',
       preferredChannels: ['email', 'slack', 'dashboard'],
       alertTiers: ['critical'],
+      ...personaConfigs.cmo,
     },
   ];
 
@@ -91,7 +96,7 @@ export function seedInitialData() {
     },
   ];
 
-  // Seed sample campaigns
+  // Seed sample campaigns with persona-specific metrics
   const defaultCampaigns: Campaign[] = [
     {
       id: 'campaign-1',
@@ -100,9 +105,25 @@ export function seedInitialData() {
       status: 'active',
       assignedPersonas: ['persona-1', 'persona-2'],
       metrics: {
-        ctr: 2.5,
-        conversion_rate: 3.2,
-        roas: 4.5,
+        // Performance Marketer metrics
+        CPM: 12.5,
+        CTR: 2.5,
+        CPC: 0.85,
+        add_to_cart: 450,
+        lead_submission: 125,
+        CVR: 3.2,
+        CPA: 25.50,
+        CAC: 28.75,
+        ROAS: 4.5,
+        // Account Manager metrics
+        daily_spend: 850,
+        pacing: 95,
+        sales: 120,
+        leads: 45,
+        creative_status: 1,
+        CAC: 28.75,
+        weekly_trend: 2.5,
+        // Common metrics
         impressions: 50000,
         clicks: 1250,
       },
@@ -117,9 +138,24 @@ export function seedInitialData() {
       status: 'active',
       assignedPersonas: ['persona-3', 'persona-4'],
       metrics: {
-        ctr: 1.8,
-        conversion_rate: 2.5,
-        roas: 3.8,
+        // Business Owner metrics
+        total_spend: 15000,
+        revenue: 67500,
+        profitability: 52500,
+        CAC: 30.25,
+        selling_price: 150,
+        contribution_margin: 0.65,
+        orders: 450,
+        leads_per_day: 25,
+        // CMO metrics
+        revenue_impact: 67500,
+        CAC_trendline: 2.8,
+        blended_ROAS: 4.2,
+        budget_runway_days: 12,
+        pipeline_risk: 0.15,
+        team_performance: 85,
+        // Common metrics
+        CTR: 1.8,
         impressions: 75000,
         clicks: 1350,
       },

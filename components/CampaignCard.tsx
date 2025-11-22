@@ -7,9 +7,10 @@ import Link from 'next/link';
 interface CampaignCardProps {
   campaign: Campaign;
   alerts: Alert[];
+  personaMetrics?: string[];
 }
 
-export default function CampaignCard({ campaign, alerts }: CampaignCardProps) {
+export default function CampaignCard({ campaign, alerts, personaMetrics }: CampaignCardProps) {
   const statusColors = {
     active: 'bg-green-100 text-green-800',
     paused: 'bg-yellow-100 text-yellow-800',
@@ -37,14 +38,27 @@ export default function CampaignCard({ campaign, alerts }: CampaignCardProps) {
       </div>
 
       <div className="mb-4">
-        <div className="text-sm text-gray-600 mb-2">Key Metrics</div>
+        <div className="text-sm text-gray-600 mb-2">
+          {personaMetrics ? 'Your Key Metrics' : 'Key Metrics'}
+        </div>
         <div className="grid grid-cols-2 gap-2 text-sm">
-          {Object.entries(campaign.metrics).slice(0, 4).map(([key, value]) => (
-            <div key={key} className="flex justify-between">
-              <span className="text-gray-600">{key}:</span>
-              <span className="font-semibold">{typeof value === 'number' ? value.toFixed(2) : value}</span>
-            </div>
-          ))}
+          {personaMetrics && personaMetrics.length > 0
+            ? personaMetrics.slice(0, 6).map((metric) => {
+                const value = campaign.metrics[metric];
+                if (value === undefined) return null;
+                return (
+                  <div key={metric} className="flex justify-between">
+                    <span className="text-gray-600">{metric}:</span>
+                    <span className="font-semibold">{typeof value === 'number' ? value.toFixed(2) : value}</span>
+                  </div>
+                );
+              })
+            : Object.entries(campaign.metrics).slice(0, 4).map(([key, value]) => (
+                <div key={key} className="flex justify-between">
+                  <span className="text-gray-600">{key}:</span>
+                  <span className="font-semibold">{typeof value === 'number' ? value.toFixed(2) : value}</span>
+                </div>
+              ))}
         </div>
       </div>
 

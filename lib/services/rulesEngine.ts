@@ -13,15 +13,17 @@ export function evaluateRule(rule: AlertRule, metric: Metric, previousMetric?: M
     case 'below':
       return value < rule.threshold;
     
-    case 'change_above':
+    case 'change_above': {
       if (!previousValue) return false;
       const change = value - previousValue;
       return change > rule.threshold;
+    }
     
-    case 'change_below':
+    case 'change_below': {
       if (!previousValue) return false;
       const change = value - previousValue;
       return change < rule.threshold;
+    }
     
     default:
       return false;

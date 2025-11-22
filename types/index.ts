@@ -39,6 +39,19 @@ export interface Persona {
   whatsappNumber?: string;
   preferredChannels: NotificationChannel[];
   alertTiers: AlertTier[]; // Which alert tiers this persona should receive
+  metrics: {
+    upper: string[];
+    mid: string[];
+    bottom: string[];
+  };
+  triggers: {
+    type: string;
+    description: string;
+    metricName: string;
+    condition: 'above' | 'below' | 'change_above' | 'change_below';
+    threshold: number;
+    timeWindow?: string;
+  }[];
 }
 
 export interface Alert {
