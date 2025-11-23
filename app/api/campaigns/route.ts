@@ -4,9 +4,12 @@ import { Campaign } from '@/types';
 
 export async function GET() {
   try {
+    console.log('GET /api/campaigns called');
     const campaigns = readData<Campaign[]>('campaigns.json', []);
+    console.log('Returning campaigns:', campaigns.length);
     return NextResponse.json(campaigns);
   } catch (error) {
+    console.error('Error in GET /api/campaigns:', error);
     return NextResponse.json({ error: 'Failed to fetch campaigns' }, { status: 500 });
   }
 }

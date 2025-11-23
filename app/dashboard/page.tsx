@@ -39,10 +39,23 @@ export default function Dashboard() {
     setLoading(true);
     try {
       // Always seed data to ensure we have mock data
-      console.log('Seeding data for persona:', personaType);
-      await fetch('/api/seed', { method: 'POST' });
+      console.log('Initializing data for persona:', personaType);
+      
+      // First check if we have data
+      const checkResponse = await fetch('/api/campaigns');
+      const existingCampaigns = await checkResponse.json();
+      console.log('Existing campaigns:', existingCampaigns.length || 0);
+      
+      // Always seed fresh data for now (for testing)
+      console.log('Seeding fresh data...');
+      const seedResponse = await fetch('/api/seed', { method: 'POST' });
+      const seedResult = await seedResponse.json();
+      console.log('Seed result:', seedResult);
+      
       // Wait a bit for data to be written
       await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // Fetch the data
       await fetchData();
     } catch (error) {
       console.error('Failed to initialize data:', error);
@@ -52,15 +65,24 @@ export default function Dashboard() {
 
   const fetchData = async () => {
     try {
+      console.log('Fetching data...');
       const [campaignsRes, alertsRes, rulesRes] = await Promise.all([
         fetch('/api/campaigns'),
         fetch('/api/alerts'),
         fetch('/api/rules'),
       ]);
 
+      console.log('Response status:', campaignsRes.status, alertsRes.status, rulesRes.status);
+
       const campaignsData = await campaignsRes.json();
       const alertsData = await alertsRes.json();
       const rulesData = await rulesRes.json();
+
+      console.log('Fetched data:', {
+        campaigns: campaignsData.length || 0,
+        alerts: alertsData.length || 0,
+        rules: rulesData.length || 0
+      });
 
       setCampaigns(Array.isArray(campaignsData) ? campaignsData : []);
       setAlerts(Array.isArray(alertsData) ? alertsData : []);
