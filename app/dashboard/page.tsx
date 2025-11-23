@@ -232,7 +232,7 @@ export default function Dashboard() {
         {activeTab === 'overview' && (
           <div>
             {/* Recent Alerts Section */}
-            <RecentAlertsSection alerts={filteredAlerts.filter(a => !a.acknowledged).slice(0, 1)} />
+            <RecentAlertsSection alerts={filteredAlerts.filter(a => !a.acknowledged)} />
             
             {/* Header Stats */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">

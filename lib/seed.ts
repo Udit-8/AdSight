@@ -1,5 +1,5 @@
 import { writeData } from './data';
-import { Persona, AlertRule, Campaign } from '@/types';
+import { Persona, AlertRule, Campaign, Alert } from '@/types';
 import { personaConfigs } from './personaConfig';
 
 export function seedInitialData() {
@@ -152,6 +152,78 @@ export function seedInitialData() {
     },
   ];
 
+  // Seed sample alerts
+  const defaultAlerts: Alert[] = [
+    {
+      id: 'alert-1',
+      ruleId: 'rule-4',
+      ruleName: 'Campaign Health Alert',
+      campaignId: 'campaign-1',
+      campaignName: 'Summer Sale Campaign',
+      metricName: 'ROAS',
+      metricValue: 2.1,
+      threshold: 3.0,
+      tier: 'critical',
+      message: 'Revenue efficiency deteriorated. If trend persists 24h, projected daily revenue -18%.',
+      timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(), // 2 hours ago
+      sentTo: [
+        {
+          personaId: 'persona-1',
+          personaName: 'Sarah Chen',
+          channels: ['email', 'slack']
+        },
+        {
+          personaId: 'persona-2', 
+          personaName: 'Mike Johnson',
+          channels: ['email', 'dashboard']
+        }
+      ],
+      acknowledged: false,
+    },
+    {
+      id: 'alert-2',
+      ruleId: 'rule-3',
+      ruleName: 'Low Conversion Rate',
+      campaignId: 'campaign-2',
+      campaignName: 'Product Launch Q4',
+      metricName: 'CVR',
+      metricValue: 1.5,
+      threshold: 2.0,
+      tier: 'warning',
+      message: 'Conversion rate dropped below 2%. Consider reviewing ad creative and landing page performance.',
+      timestamp: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(), // 4 hours ago
+      sentTo: [
+        {
+          personaId: 'persona-3',
+          personaName: 'Alex Rivera',
+          channels: ['whatsapp', 'dashboard']
+        }
+      ],
+      acknowledged: false,
+    },
+    {
+      id: 'alert-3',
+      ruleId: 'rule-1',
+      ruleName: 'Budget Pacing Alert',
+      campaignId: 'campaign-1',
+      campaignName: 'Summer Sale Campaign',
+      metricName: 'daily_spend',
+      metricValue: 1020,
+      threshold: 850,
+      tier: 'warning',
+      message: 'Daily spend exceeded budget by 20%. Current pacing suggests overspend risk.',
+      timestamp: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString(), // 6 hours ago
+      sentTo: [
+        {
+          personaId: 'persona-2',
+          personaName: 'Mike Johnson',
+          channels: ['email', 'slack']
+        }
+      ],
+      acknowledged: false,
+    }
+  ];
+
   try {
     console.log('Writing personas data...');
     writeData('personas.json', defaultPersonas);
@@ -160,7 +232,7 @@ export function seedInitialData() {
     console.log('Writing campaigns data...');
     writeData('campaigns.json', defaultCampaigns);
     console.log('Writing alerts data...');
-    writeData('alerts.json', []);
+    writeData('alerts.json', defaultAlerts);
     console.log('Initial data seeded successfully');
   } catch (error) {
     console.error('Failed to seed initial data:', error);
@@ -310,11 +382,83 @@ export function getSeedData() {
     },
   ];
 
+  // Sample alerts for getSeedData
+  const defaultAlerts: Alert[] = [
+    {
+      id: 'alert-1',
+      ruleId: 'rule-4',
+      ruleName: 'Campaign Health Alert',
+      campaignId: 'campaign-1',
+      campaignName: 'Summer Sale Campaign',
+      metricName: 'ROAS',
+      metricValue: 2.1,
+      threshold: 3.0,
+      tier: 'critical',
+      message: 'Revenue efficiency deteriorated. If trend persists 24h, projected daily revenue -18%.',
+      timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(), // 2 hours ago
+      sentTo: [
+        {
+          personaId: 'persona-1',
+          personaName: 'Sarah Chen',
+          channels: ['email', 'slack']
+        },
+        {
+          personaId: 'persona-2', 
+          personaName: 'Mike Johnson',
+          channels: ['email', 'dashboard']
+        }
+      ],
+      acknowledged: false,
+    },
+    {
+      id: 'alert-2',
+      ruleId: 'rule-3',
+      ruleName: 'Low Conversion Rate',
+      campaignId: 'campaign-2',
+      campaignName: 'Product Launch Q4',
+      metricName: 'CVR',
+      metricValue: 1.5,
+      threshold: 2.0,
+      tier: 'warning',
+      message: 'Conversion rate dropped below 2%. Consider reviewing ad creative and landing page performance.',
+      timestamp: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(), // 4 hours ago
+      sentTo: [
+        {
+          personaId: 'persona-3',
+          personaName: 'Alex Rivera',
+          channels: ['whatsapp', 'dashboard']
+        }
+      ],
+      acknowledged: false,
+    },
+    {
+      id: 'alert-3',
+      ruleId: 'rule-1',
+      ruleName: 'Budget Pacing Alert',
+      campaignId: 'campaign-1',
+      campaignName: 'Summer Sale Campaign',
+      metricName: 'daily_spend',
+      metricValue: 1020,
+      threshold: 850,
+      tier: 'warning',
+      message: 'Daily spend exceeded budget by 20%. Current pacing suggests overspend risk.',
+      timestamp: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString(), // 6 hours ago
+      sentTo: [
+        {
+          personaId: 'persona-2',
+          personaName: 'Mike Johnson',
+          channels: ['email', 'slack']
+        }
+      ],
+      acknowledged: false,
+    }
+  ];
+
   return {
     personas: defaultPersonas,
     rules: defaultRules,
     campaigns: defaultCampaigns,
-    alerts: []
+    alerts: defaultAlerts
   };
 }
 
