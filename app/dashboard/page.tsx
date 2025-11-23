@@ -593,6 +593,37 @@ function RecentAlertsSection({ alerts }: { alerts: Alert[] }) {
                       <li className="text-gray-500">+1 more actions</li>
                     </ul>
                   </div>
+
+                  {/* Notification Channels */}
+                  <div className="border-t border-gray-700 pt-3">
+                    <div className="text-gray-400 text-xs mb-2">Notifications Sent</div>
+                    <div className="flex flex-wrap gap-2">
+                      {alert.sentTo.map((notification, index) => (
+                        <div key={index} className="flex items-center gap-1">
+                          <div className="text-gray-300 text-xs font-medium">{notification.personaName}:</div>
+                          <div className="flex gap-1">
+                            {notification.channels.map((channel, channelIndex) => (
+                              <span
+                                key={channelIndex}
+                                className={`px-2 py-1 rounded text-xs font-medium ${
+                                  channel === 'email' ? 'bg-blue-600 text-white' :
+                                  channel === 'slack' ? 'bg-green-600 text-white' :
+                                  channel === 'whatsapp' ? 'bg-green-500 text-white' :
+                                  'bg-gray-600 text-white'
+                                }`}
+                                title={`Sent via ${channel}`}
+                              >
+                                {channel === 'email' ? '📧' :
+                                 channel === 'slack' ? '💬' :
+                                 channel === 'whatsapp' ? '📱' :
+                                 '🔔'}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 </div>
               ))}
           </div>
