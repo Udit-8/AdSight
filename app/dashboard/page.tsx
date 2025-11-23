@@ -196,6 +196,12 @@ export default function Dashboard() {
                   Overview
                 </button>
                 <button
+                  onClick={() => window.location.href = '/campaigns'}
+                  className="px-4 py-2 rounded-lg font-medium text-gray-300 hover:bg-gray-700"
+                >
+                  Campaigns
+                </button>
+                <button
                   onClick={() => setActiveTab('alerts')}
                   className={`px-4 py-2 rounded-lg font-medium relative ${
                     activeTab === 'alerts' ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-700'
