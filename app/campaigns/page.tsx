@@ -63,41 +63,67 @@ export default function CampaignsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 flex">
-      {/* Sidebar */}
-      <div className="w-64 bg-gray-800 border-r border-gray-700">
-        <div className="p-6">
-          <h1 className="text-xl font-bold text-purple-400 mb-8">CampAlign Companion</h1>
-          
-          <nav className="space-y-2">
-            <div className="flex items-center gap-3 px-4 py-3 text-gray-300 hover:bg-gray-700 rounded-lg cursor-pointer">
-              <span>🏠</span>
-              <span>Portfolio</span>
+    <div className="min-h-screen bg-gray-900">
+      {/* Top Navigation */}
+      <nav className="bg-gray-800 border-b border-gray-700">
+        <div className="container mx-auto px-6 py-4">
+          <div className="flex items-center justify-between">
+            <button
+              onClick={() => router.push('/')}
+              className="text-2xl font-bold text-blue-400"
+            >
+              AdSight
+            </button>
+            <div className="flex items-center gap-6">
+              <div className="text-sm text-gray-300">
+                <span className="font-medium">Role:</span> {selectedPersona ? selectedPersona.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase()) : 'Loading...'}
+              </div>
+              <button
+                onClick={() => {
+                  localStorage.removeItem('selectedPersona');
+                  router.push('/');
+                }}
+                className="text-sm text-blue-400 hover:text-blue-300"
+              >
+                Change Role
+              </button>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => router.push('/dashboard')}
+                  className="px-4 py-2 rounded-lg font-medium text-gray-300 hover:bg-gray-700"
+                >
+                  Overview
+                </button>
+                <button className="px-4 py-2 rounded-lg font-medium bg-blue-600 text-white">
+                  Campaigns
+                </button>
+                <button
+                  onClick={() => router.push('/dashboard')}
+                  className="px-4 py-2 rounded-lg font-medium text-gray-300 hover:bg-gray-700 relative"
+                >
+                  Alerts
+                  {criticalAlerts.length > 0 && (
+                    <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                      {criticalAlerts.length}
+                    </span>
+                  )}
+                </button>
+                <button
+                  onClick={() => router.push('/dashboard')}
+                  className="px-4 py-2 rounded-lg font-medium text-gray-300 hover:bg-gray-700"
+                >
+                  Rules
+                </button>
+              </div>
             </div>
-            <div className="flex items-center gap-3 px-4 py-3 bg-purple-600 text-white rounded-lg">
-              <span>📊</span>
-              <span>Campaigns</span>
-            </div>
-            <div className="flex items-center gap-3 px-4 py-3 text-gray-300 hover:bg-gray-700 rounded-lg cursor-pointer">
-              <span>⚠️</span>
-              <span>Alerts</span>
-            </div>
-            <div className="flex items-center gap-3 px-4 py-3 text-gray-300 hover:bg-gray-700 rounded-lg cursor-pointer">
-              <span>⚙️</span>
-              <span>Rules</span>
-            </div>
-            <div className="flex items-center gap-3 px-4 py-3 text-gray-300 hover:bg-gray-700 rounded-lg cursor-pointer">
-              <span>▶️</span>
-              <span>Playbooks</span>
-            </div>
-          </nav>
+          </div>
         </div>
-      </div>
+      </nav>
 
       {/* Main Content */}
-      <div className="flex-1">
+      <div className="container mx-auto px-6 py-8">
         {/* Header */}
-        <div className="bg-gray-800 border-b border-gray-700 p-6">
+        <div className="mb-8">
           <div className="flex items-center justify-between mb-6">
             <div>
               <h1 className="text-2xl font-bold text-white mb-2">Campaigns</h1>
@@ -174,24 +200,22 @@ export default function CampaignsPage() {
         </div>
 
         {/* Campaign Cards */}
-        <div className="p-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredCampaigns.map((campaign) => (
-              <CampaignCard key={campaign.id} campaign={campaign} alerts={alerts} />
-            ))}
-          </div>
-
-          {filteredCampaigns.length === 0 && (
-            <div className="text-center py-12">
-              <div className="text-gray-400 text-lg">No campaigns found</div>
-              {searchTerm && (
-                <div className="text-gray-500 text-sm mt-2">
-                  Try adjusting your search terms
-                </div>
-              )}
-            </div>
-          )}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredCampaigns.map((campaign) => (
+            <CampaignCard key={campaign.id} campaign={campaign} alerts={alerts} />
+          ))}
         </div>
+
+        {filteredCampaigns.length === 0 && (
+          <div className="text-center py-12">
+            <div className="text-gray-400 text-lg">No campaigns found</div>
+            {searchTerm && (
+              <div className="text-gray-500 text-sm mt-2">
+                Try adjusting your search terms
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
