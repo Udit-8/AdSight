@@ -23,8 +23,8 @@ export default function AlertList({ alerts, onAcknowledge }: AlertListProps) {
     }
   };
 
-  const unacknowledged = alerts.filter(a => !a.acknowledged);
-  const acknowledged = alerts.filter(a => a.acknowledged);
+  const unacknowledged = Array.isArray(alerts) ? alerts.filter(a => !a.acknowledged) : [];
+  const acknowledged = Array.isArray(alerts) ? alerts.filter(a => a.acknowledged) : [];
 
   return (
     <div>

@@ -59,25 +59,27 @@ export default function Dashboard() {
     }
   };
 
-  const handlePersonaSelect = (personaType: PersonaType) => {
+  const handlePersonaSelect = async (personaType: PersonaType) => {
     setSelectedPersona(personaType);
+    
+    // Automatically seed data if no campaigns exist
+    try {
+      const response = await fetch('/api/campaigns');
+      const campaigns = await response.json();
+      
+      if (!Array.isArray(campaigns) || campaigns.length === 0) {
+        await fetch('/api/seed', { method: 'POST' });
+      }
+    } catch (error) {
+      console.error('Failed to check/seed data:', error);
+    }
+    
     fetchData();
   };
 
   const handlePersonaChange = () => {
     localStorage.removeItem('selectedPersona');
     setSelectedPersona(null);
-  };
-
-  const handleSeedData = async () => {
-    if (confirm('This will create sample data. Continue?')) {
-      try {
-        await fetch('/api/seed', { method: 'POST' });
-        fetchData();
-      } catch (error) {
-        console.error('Failed to seed data:', error);
-      }
-    }
   };
 
   // Filter metrics and alerts based on selected persona
@@ -232,30 +234,7 @@ export default function Dashboard() {
 
             {filteredCampaigns.length === 0 && (
               <div className="text-center py-12 bg-white rounded-lg shadow">
-                <p className="text-gray-600 mb-4">No campaigns yet. Get started with sample data or create your own!</p>
-                <div className="flex gap-4 justify-center">
-                  <button
-                    onClick={handleSeedData}
-                    className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700"
-                  >
-                    Load Sample Data
-                  </button>
-                  <button
-                    onClick={() => {
-                      const name = prompt('Campaign name:');
-                      if (name) {
-                        fetch('/api/campaigns', {
-                          method: 'POST',
-                          headers: { 'Content-Type': 'application/json' },
-                          body: JSON.stringify({ name, platform: 'google_ads' }),
-                        }).then(() => fetchData());
-                      }
-                    }}
-                    className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700"
-                  >
-                    Create Campaign
-                  </button>
-                </div>
+                <p className="text-gray-600">Loading campaigns...</p>
               </div>
             )}
           </div>

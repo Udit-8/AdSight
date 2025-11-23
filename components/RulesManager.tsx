@@ -183,7 +183,7 @@ export default function RulesManager({ rules, campaigns, onUpdate }: RulesManage
       )}
 
       <div className="space-y-4">
-        {rules.length === 0 ? (
+        {!Array.isArray(rules) || rules.length === 0 ? (
           <div className="bg-white rounded-lg shadow p-6 text-center text-gray-600">
             No rules configured. Create your first rule to start monitoring.
           </div>
