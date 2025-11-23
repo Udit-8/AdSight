@@ -84,6 +84,10 @@ export default function Dashboard() {
   const handlePersonaChange = () => {
     localStorage.removeItem('selectedPersona');
     setSelectedPersona(null);
+    // Redirect to home page to show persona selector
+    if (typeof window !== 'undefined') {
+      window.location.href = '/';
+    }
   };
 
   // Filter metrics and alerts based on selected persona
@@ -126,9 +130,16 @@ export default function Dashboard() {
     );
   }
 
-  // Show persona selector if no persona selected
+  // If no persona selected, redirect to home page
   if (!selectedPersona) {
-    return <PersonaSelector onSelect={handlePersonaSelect} />;
+    if (typeof window !== 'undefined') {
+      window.location.href = '/';
+    }
+    return (
+      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+        <div className="text-white">Redirecting...</div>
+      </div>
+    );
   }
 
   return (
