@@ -443,7 +443,10 @@ function CampaignRow({
 
         {/* Actions */}
         <div className="text-right">
-          <button className="bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-lg text-sm font-medium">
+          <button 
+            onClick={() => window.location.href = `/campaign/${campaign.id}`}
+            className="bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-lg text-sm font-medium"
+          >
             View Details
           </button>
         </div>
