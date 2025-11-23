@@ -42,12 +42,19 @@ export default function Dashboard() {
         fetch('/api/rules'),
       ]);
 
-      setCampaigns(await campaignsRes.json());
-      setAlerts(await alertsRes.json());
-      setRules(await rulesRes.json());
+      const campaignsData = await campaignsRes.json();
+      const alertsData = await alertsRes.json();
+      const rulesData = await rulesRes.json();
+
+      setCampaigns(Array.isArray(campaignsData) ? campaignsData : []);
+      setAlerts(Array.isArray(alertsData) ? alertsData : []);
+      setRules(Array.isArray(rulesData) ? rulesData : []);
       setLoading(false);
     } catch (error) {
       console.error('Failed to fetch data:', error);
+      setCampaigns([]);
+      setAlerts([]);
+      setRules([]);
       setLoading(false);
     }
   };
@@ -74,11 +81,11 @@ export default function Dashboard() {
   };
 
   // Filter metrics and alerts based on selected persona
-  const personaMetrics = selectedPersona ? getPersonaMetrics(selectedPersona) : [];
+  const personaMetrics = selectedPersona ? (getPersonaMetrics(selectedPersona) || []) : [];
   const personaConfig = selectedPersona ? personaConfigs[selectedPersona] : null;
   
   // Filter campaigns to show only relevant metrics
-  const filteredCampaigns = campaigns.map(campaign => {
+  const filteredCampaigns = Array.isArray(campaigns) ? campaigns.map(campaign => {
     if (!selectedPersona) return campaign;
     
     const filteredMetrics: { [key: string]: number } = {};
@@ -92,12 +99,14 @@ export default function Dashboard() {
       ...campaign,
       metrics: filteredMetrics,
     };
-  });
+  }) : [];
 
   // Filter alerts based on persona's alert tiers
-  const filteredAlerts = selectedPersona && personaConfig
-    ? alerts.filter(a => personaConfig.alertTiers.includes(a.tier))
-    : alerts;
+  const filteredAlerts = Array.isArray(alerts) 
+    ? (selectedPersona && personaConfig
+        ? alerts.filter(a => personaConfig.alertTiers.includes(a.tier))
+        : alerts)
+    : [];
 
   const unacknowledgedAlerts = filteredAlerts.filter(a => !a.acknowledged);
   const criticalAlerts = unacknowledgedAlerts.filter(a => a.tier === 'critical');

@@ -17,8 +17,8 @@ export default function CampaignCard({ campaign, alerts, personaMetrics }: Campa
     ended: 'bg-gray-100 text-gray-800',
   };
 
-  const criticalAlerts = alerts.filter(a => a.tier === 'critical');
-  const warningAlerts = alerts.filter(a => a.tier === 'warning');
+  const criticalAlerts = Array.isArray(alerts) ? alerts.filter(a => a.tier === 'critical') : [];
+  const warningAlerts = Array.isArray(alerts) ? alerts.filter(a => a.tier === 'warning') : [];
 
   return (
     <div className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
@@ -42,9 +42,9 @@ export default function CampaignCard({ campaign, alerts, personaMetrics }: Campa
           {personaMetrics ? 'Your Key Metrics' : 'Key Metrics'}
         </div>
         <div className="grid grid-cols-2 gap-2 text-sm">
-          {personaMetrics && personaMetrics.length > 0
+          {Array.isArray(personaMetrics) && personaMetrics.length > 0
             ? personaMetrics.slice(0, 6).map((metric) => {
-                const value = campaign.metrics[metric];
+                const value = campaign.metrics?.[metric];
                 if (value === undefined) return null;
                 return (
                   <div key={metric} className="flex justify-between">
@@ -53,7 +53,7 @@ export default function CampaignCard({ campaign, alerts, personaMetrics }: Campa
                   </div>
                 );
               })
-            : Object.entries(campaign.metrics).slice(0, 4).map(([key, value]) => (
+            : Object.entries(campaign.metrics || {}).slice(0, 4).map(([key, value]) => (
                 <div key={key} className="flex justify-between">
                   <span className="text-gray-600">{key}:</span>
                   <span className="font-semibold">{typeof value === 'number' ? value.toFixed(2) : value}</span>
