@@ -38,28 +38,32 @@ export default function Dashboard() {
   const initializeData = async (personaType: PersonaType) => {
     setLoading(true);
     try {
-      // Always seed data to ensure we have mock data
       console.log('Initializing data for persona:', personaType);
       
-      // First check if we have data
-      const checkResponse = await fetch('/api/campaigns');
-      const existingCampaigns = await checkResponse.json();
-      console.log('Existing campaigns:', existingCampaigns.length || 0);
+      // Get seed data directly (bypassing file system issues on Vercel)
+      const seedResponse = await fetch('/api/seed');
+      const seedData = await seedResponse.json();
+      console.log('Got seed data:', seedData);
       
-      // Always seed fresh data for now (for testing)
-      console.log('Seeding fresh data...');
-      const seedResponse = await fetch('/api/seed', { method: 'POST' });
-      const seedResult = await seedResponse.json();
-      console.log('Seed result:', seedResult);
+      if (seedData.campaigns && seedData.campaigns.length > 0) {
+        // Use the seed data directly
+        setCampaigns(seedData.campaigns);
+        setRules(seedData.rules || []);
+        setAlerts(seedData.alerts || []);
+        console.log('Set data directly from seed:', {
+          campaigns: seedData.campaigns.length,
+          rules: seedData.rules?.length || 0
+        });
+      } else {
+        // Fallback to regular fetch
+        await fetchData();
+      }
       
-      // Wait a bit for data to be written
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // Fetch the data
-      await fetchData();
+      setLoading(false);
     } catch (error) {
       console.error('Failed to initialize data:', error);
-      setLoading(false);
+      // Fallback to fetch
+      await fetchData();
     }
   };
 
