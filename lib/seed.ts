@@ -153,13 +153,18 @@ export function seedInitialData() {
   ];
 
   try {
+    console.log('Writing personas data...');
     writeData('personas.json', defaultPersonas);
+    console.log('Writing rules data...');
     writeData('rules.json', defaultRules);
+    console.log('Writing campaigns data...');
     writeData('campaigns.json', defaultCampaigns);
+    console.log('Writing alerts data...');
     writeData('alerts.json', []);
     console.log('Initial data seeded successfully');
   } catch (error) {
     console.error('Failed to seed initial data:', error);
+    throw error;
   }
 }
 

@@ -25,14 +25,30 @@ export default function Dashboard() {
     const savedPersona = localStorage.getItem('selectedPersona') as PersonaType | null;
     if (savedPersona && Object.keys(personaConfigs).includes(savedPersona)) {
       setSelectedPersona(savedPersona);
-      fetchData();
+      // Automatically seed data and fetch
+      initializeData(savedPersona);
       // Refresh every 30 seconds
       const interval = setInterval(fetchData, 30000);
       return () => clearInterval(interval);
     } else {
       setLoading(false);
     }
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const initializeData = async (personaType: PersonaType) => {
+    setLoading(true);
+    try {
+      // Always seed data to ensure we have mock data
+      console.log('Seeding data for persona:', personaType);
+      await fetch('/api/seed', { method: 'POST' });
+      // Wait a bit for data to be written
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      await fetchData();
+    } catch (error) {
+      console.error('Failed to initialize data:', error);
+      setLoading(false);
+    }
+  };
 
   const fetchData = async () => {
     try {
@@ -61,24 +77,8 @@ export default function Dashboard() {
 
   const handlePersonaSelect = async (personaType: PersonaType) => {
     setSelectedPersona(personaType);
-    setLoading(true);
-    
-    // Automatically seed data if no campaigns exist
-    try {
-      const response = await fetch('/api/campaigns');
-      const campaignsData = await response.json();
-      
-      if (!Array.isArray(campaignsData) || campaignsData.length === 0) {
-        console.log('No campaigns found, seeding data...');
-        await fetch('/api/seed', { method: 'POST' });
-        // Wait a bit for data to be written
-        await new Promise(resolve => setTimeout(resolve, 500));
-      }
-    } catch (error) {
-      console.error('Failed to check/seed data:', error);
-    }
-    
-    await fetchData();
+    localStorage.setItem('selectedPersona', personaType);
+    await initializeData(personaType);
   };
 
   const handlePersonaChange = () => {
