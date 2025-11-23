@@ -501,12 +501,11 @@ function RecentAlertsSection({ alerts }: { alerts: Alert[] }) {
   return (
     <>
       <div className="mb-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Recent Alerts */}
-          <div>
-            <h2 className="text-xl font-bold text-orange-400 mb-4">Recent Alerts</h2>
-            <div className="space-y-4">
-              {alerts.slice(0, 3).map((alert) => (
+        {/* Recent Alerts */}
+        <div>
+          <h2 className="text-xl font-bold text-orange-400 mb-4">Recent Alerts</h2>
+          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+            {alerts.slice(0, 6).map((alert) => (
                 <div
                   key={alert.id}
                   onClick={() => handleAlertClick(alert)}
@@ -596,32 +595,6 @@ function RecentAlertsSection({ alerts }: { alerts: Alert[] }) {
                   </div>
                 </div>
               ))}
-            </div>
-          </div>
-
-          {/* Quick Actions */}
-          <div>
-            <h2 className="text-xl font-bold text-purple-400 mb-4">Quick Actions</h2>
-            <div className="space-y-4">
-              <button className="w-full bg-gray-800 border border-gray-700 rounded-lg p-4 text-left hover:border-gray-600 transition-colors">
-                <div className="flex items-center gap-3">
-                  <span className="text-lg">+</span>
-                  <span className="text-white font-medium">Create New Campaign</span>
-                </div>
-              </button>
-              <button className="w-full bg-gray-800 border border-gray-700 rounded-lg p-4 text-left hover:border-gray-600 transition-colors">
-                <div className="flex items-center gap-3">
-                  <span className="text-lg">📊</span>
-                  <span className="text-white font-medium">View Analytics</span>
-                </div>
-              </button>
-              <button className="w-full bg-gray-800 border border-gray-700 rounded-lg p-4 text-left hover:border-gray-600 transition-colors">
-                <div className="flex items-center gap-3">
-                  <span className="text-lg">⚙️</span>
-                  <span className="text-white font-medium">Campaign Settings</span>
-                </div>
-              </button>
-            </div>
           </div>
         </div>
       </div>
