@@ -27,9 +27,9 @@ export default function Dashboard() {
       setSelectedPersona(savedPersona);
       // Automatically seed data and fetch
       initializeData(savedPersona);
-      // Refresh every 30 seconds
-      const interval = setInterval(fetchData, 30000);
-      return () => clearInterval(interval);
+      // Note: Auto-refresh disabled for mock data - can be re-enabled for real-time data
+      // const interval = setInterval(() => refreshData(savedPersona), 30000);
+      // return () => clearInterval(interval);
     } else {
       setLoading(false);
     }
@@ -98,6 +98,34 @@ export default function Dashboard() {
       setAlerts([]);
       setRules([]);
       setLoading(false);
+    }
+  };
+
+  const refreshData = async (personaType: PersonaType) => {
+    try {
+      console.log('Refreshing data for persona:', personaType);
+      
+      // Use seed data for refresh (same as initial load)
+      const seedResponse = await fetch('/api/seed');
+      const seedData = await seedResponse.json();
+      console.log('Got refresh seed data:', seedData);
+      
+      if (seedData.campaigns && seedData.campaigns.length > 0) {
+        // Use the seed data directly
+        setCampaigns(seedData.campaigns);
+        setRules(seedData.rules || []);
+        setAlerts(seedData.alerts || []);
+        console.log('Refreshed data from seed:', {
+          campaigns: seedData.campaigns.length,
+          rules: seedData.rules?.length || 0,
+          alerts: seedData.alerts?.length || 0
+        });
+      } else {
+        console.log('Seed data empty, keeping existing data');
+      }
+    } catch (error) {
+      console.error('Failed to refresh data:', error);
+      // Don't clear existing data on refresh failure
     }
   };
 
