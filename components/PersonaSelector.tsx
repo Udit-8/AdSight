@@ -30,11 +30,11 @@ export default function PersonaSelector({ onSelect }: PersonaSelectorProps) {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gray-900 flex items-center justify-center p-4">
       <div className="max-w-4xl w-full">
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">Welcome to AdSight</h1>
-          <p className="text-lg text-gray-600">Select your role to view personalized metrics and alerts</p>
+          <h1 className="text-4xl font-bold text-white mb-2">Welcome to AdSight</h1>
+          <p className="text-lg text-gray-300">Select your role to view personalized metrics and alerts</p>
         </div>
 
         <div className="grid md:grid-cols-2 gap-6 mb-8">
@@ -46,18 +46,18 @@ export default function PersonaSelector({ onSelect }: PersonaSelectorProps) {
               <div
                 key={personaType}
                 onClick={() => handleSelect(personaType)}
-                className={`bg-white rounded-lg shadow-md p-6 cursor-pointer transition-all ${
+                className={`bg-gray-800 border border-gray-700 rounded-lg p-6 cursor-pointer transition-all ${
                   isSelected
-                    ? 'ring-4 ring-blue-500 border-2 border-blue-500'
-                    : 'hover:shadow-lg border-2 border-transparent'
+                    ? 'ring-4 ring-blue-500 border-blue-500'
+                    : 'hover:border-gray-600 hover:bg-gray-750'
                 }`}
               >
                 <div className="flex items-start justify-between mb-4">
                   <div>
-                    <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                    <h3 className="text-xl font-semibold text-white mb-2">
                       {getPersonaDisplayName(personaType)}
                     </h3>
-                    <p className="text-sm text-gray-600 mb-4">
+                    <p className="text-sm text-gray-300 mb-4">
                       {getPersonaDescription(personaType)}
                     </p>
                   </div>
@@ -70,20 +70,20 @@ export default function PersonaSelector({ onSelect }: PersonaSelectorProps) {
 
                 <div className="space-y-2">
                   <div>
-                    <div className="text-xs font-semibold text-gray-500 mb-1">Key Metrics:</div>
+                    <div className="text-xs font-semibold text-gray-400 mb-1">Key Metrics:</div>
                     <div className="flex flex-wrap gap-1">
                       {[...config.metrics.upper, ...config.metrics.mid, ...config.metrics.bottom].slice(0, 6).map((metric) => (
-                        <span key={metric} className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">
+                        <span key={metric} className="bg-blue-900 text-blue-300 text-xs px-2 py-1 rounded">
                           {metric}
                         </span>
                       ))}
                     </div>
                   </div>
                   <div>
-                    <div className="text-xs font-semibold text-gray-500 mb-1">Alert Types:</div>
+                    <div className="text-xs font-semibold text-gray-400 mb-1">Alert Types:</div>
                     <div className="flex flex-wrap gap-1">
                       {config.triggers.slice(0, 3).map((trigger) => (
-                        <span key={trigger.type} className="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded">
+                        <span key={trigger.type} className="bg-yellow-900 text-yellow-300 text-xs px-2 py-1 rounded">
                           {trigger.type}
                         </span>
                       ))}
