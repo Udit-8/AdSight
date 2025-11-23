@@ -52,6 +52,7 @@ export default function CampaignsPage() {
     ? Math.round(campaigns.reduce((sum, c) => sum + c.healthScore, 0) / campaigns.length)
     : 0;
 
+  const unacknowledgedAlerts = alerts.filter(a => !a.acknowledged);
   const criticalAlerts = alerts.filter(a => a.tier === 'critical' && !a.acknowledged);
 
   if (loading) {
@@ -98,18 +99,18 @@ export default function CampaignsPage() {
                   Campaigns
                 </button>
                 <button
-                  onClick={() => router.push('/dashboard')}
+                  onClick={() => router.push('/dashboard?tab=alerts')}
                   className="px-4 py-2 rounded-lg font-medium text-gray-300 hover:bg-gray-700 relative"
                 >
                   Alerts
-                  {criticalAlerts.length > 0 && (
+                  {unacknowledgedAlerts.length > 0 && (
                     <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                      {criticalAlerts.length}
+                      {unacknowledgedAlerts.length}
                     </span>
                   )}
                 </button>
                 <button
-                  onClick={() => router.push('/dashboard')}
+                  onClick={() => router.push('/dashboard?tab=rules')}
                   className="px-4 py-2 rounded-lg font-medium text-gray-300 hover:bg-gray-700"
                 >
                   Rules

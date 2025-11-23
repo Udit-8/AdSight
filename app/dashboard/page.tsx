@@ -1,8 +1,8 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Campaign, Alert, AlertRule, PersonaType } from '@/types';
 import CampaignCard from '@/components/CampaignCard';
 import AlertList from '@/components/AlertList';
@@ -11,8 +11,9 @@ import PersonaSelector from '@/components/PersonaSelector';
 import { getPersonaDisplayName, getPersonaMetrics, personaConfigs } from '@/lib/personaConfig';
 import { getTierColor, getHealthScoreColor } from '@/lib/utils';
 
-export default function Dashboard() {
+function DashboardContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [selectedPersona, setSelectedPersona] = useState<PersonaType | null>(null);
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [alerts, setAlerts] = useState<Alert[]>([]);
@@ -34,6 +35,14 @@ export default function Dashboard() {
       setLoading(false);
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Handle URL tab parameter
+  useEffect(() => {
+    const tab = searchParams.get('tab');
+    if (tab && ['overview', 'alerts', 'rules'].includes(tab)) {
+      setActiveTab(tab as 'overview' | 'alerts' | 'rules');
+    }
+  }, [searchParams]);
 
   const initializeData = async (personaType: PersonaType) => {
     setLoading(true);
@@ -821,6 +830,14 @@ function RecentAlertsSection({ alerts }: { alerts: Alert[] }) {
         </div>
       )}
     </>
+  );
+}
+
+export default function Dashboard() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-gray-900 flex items-center justify-center"><div className="text-white">Loading...</div></div>}>
+      <DashboardContent />
+    </Suspense>
   );
 }
 
